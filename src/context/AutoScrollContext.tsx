@@ -7,17 +7,18 @@ interface AutoScrollContextType {
 
 export const AutoScrollContext = createContext<AutoScrollContextType>({
     autoScroll: true,
-    setAutoScroll: () => {},
+    setAutoScroll: () => {
+    }
 });
 
 export const AutoScrollProvider: FC<{ children?: ReactNode }> = ({
-                                                                     children,
+                                                                     children
                                                                  }) => {
     const [autoScroll, setAutoScroll] = useState<boolean>(true);
 
     return (
         <AutoScrollContext.Provider value={{ autoScroll, setAutoScroll }}>
-    {children}
-    </AutoScrollContext.Provider>
-);
+            {children}
+        </AutoScrollContext.Provider>
+    );
 };

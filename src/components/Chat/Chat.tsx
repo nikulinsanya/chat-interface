@@ -1,19 +1,21 @@
 'use client';
-import React, { useState } from 'react';
-import { ChatWindow } from '@/components/ChatWindow/ChatWindow';
+import { ChatWindow } from '@/components/Chat/ChatWindow/ChatWindow';
+import { ChatInput } from '@/components/Chat/ChatInput/ChatInput';
+import { ChatProvider } from '@/context/ChatContext';
+import { ChatHeader } from '@/components/Chat/ChatHeader/ChatHeader';
+import { AutoScrollProvider } from '@/context/AutoScrollContext';
 
 
 const Chat = () => {
-    const [sanya, setSanya] = useState('Nikulin');
-
-    return (<div className="p-2 w-full">
-        <div className="border-s-orange-50 border border-amber-50 pb-1 block font-bold">
-        My Chat with {sanya}
-        </div>
-        <ChatWindow></ChatWindow>
-        <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => setSanya('Sanya')}>Change name</button>
-    </div>);
+    return (
+        <ChatProvider>
+            <AutoScrollProvider>
+            <div className="p-2 w-full chat-block">
+                <ChatHeader></ChatHeader>
+                <ChatWindow></ChatWindow>
+                <ChatInput></ChatInput>
+            </div>
+            </AutoScrollProvider>
+        </ChatProvider>);
 }
 export default Chat;

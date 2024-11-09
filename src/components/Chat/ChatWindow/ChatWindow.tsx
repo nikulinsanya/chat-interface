@@ -1,34 +1,40 @@
-import { useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import './ChatWindow.scss';
-
-export interface Message {
-    text: string;
-    sender: 'user' | 'bot';
-}
+import { ChatContext } from '@/context/ChatContext';
+import { AutoScrollContext } from '@/context/AutoScrollContext';
 
 export const ChatWindow = () => {
+    const { messages } = useContext(ChatContext)
+    const { autoScroll } = useContext(AutoScrollContext)
+    const messageRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+            if (messageRef.current && autoScroll) {
+                messageRef.current.scrollIntoView(
+                    {
+                        behavior: 'smooth',
+                        block: 'end'
+                    })
+            }
+        },
+        [messages, autoScroll])
 
-    const [messages, setMessages] = useState<Message[]>(
-        [
-            { text: 'Hello', sender: 'bot' },
-            { text: 'How are you?', sender: 'user' }
-        ]
-    );
     return (
-        <div>
-            <ul className="block p-2 messages-block">
-                {messages.map((message, index) => (
-                        <li key={index} className={
-                            `${message.sender === 'bot' ? 'italic text-left': 'font-bold text-right'}
+        messages.length ?
+            (<div
+                className="chat-window flex-1 overflow-y-auto p-4 block mb-3 mt-3 border-solid border-gray-100 border-2 chat-block">
+                <ul className="messages-block">
+                    {messages.map((message, index) => (
+                            <li key={index} className={
+                                `${message.sender === 'bot' ? 'text-left' : 'p-2 mb-2 bg-slate-50 text-right rounded-md'}
                             pb-2`
-                        }>
-                            {message.sender === 'bot' ? 'Bot: ' : 'User: '}
-                            {message.text}
-                        </li>
-                    )
-                )}
+                            }>
+                                {message.content}
+                            </li>
+                        )
+                    )}
+                </ul>
 
-            </ul>
-        </div>
+                <div id={'el'} ref={messageRef}></div>
+            </div>) : null
     )
 }
